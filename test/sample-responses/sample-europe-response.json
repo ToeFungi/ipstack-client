@@ -1,0 +1,30 @@
+{
+  "ip": "2.59.187.255",
+  "type": "ipv4",
+  "continent_code": "EU",
+  "continent_name": "Europe",
+  "country_code": "DK",
+  "country_name": "Denmark",
+  "region_code": "some-region-code",
+  "region_name": "some-region-name",
+  "city": "some-city",
+  "zip": "some-zip",
+  "latitude": 55.7123,
+  "longitude": 12.0564,
+  "location": {
+    "geoname_id": 993800,
+    "capital": "Copenhagen",
+    "languages": [
+      {
+        "code": "da",
+        "name": "Danish",
+        "native": "Dansk"
+      }
+    ],
+    "country_flag": "http:\/\/assets.ipstack.com\/flags\/dk.svg",
+    "country_flag_emoji": "🇩🇰",
+    "country_flag_emoji_unicode": "U+1F1E9 U+1F1F0",
+    "calling_code": "45",
+    "is_eu": true
+  }
+}

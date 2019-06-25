@@ -1,0 +1,75 @@
+{
+  "ip": "41.121.45.123",
+  "type": "ipv4",
+  "continent_code": "AF",
+  "continent_name": "Africa",
+  "country_code": "ZA",
+  "country_name": "South Africa",
+  "region_code": "GT",
+  "region_name": "Gauteng",
+  "city": "Johannesburg",
+  "zip": "2001",
+  "latitude": -26.2309,
+  "longitude": 28.0583,
+  "location": {
+    "geoname_id": 993800,
+    "capital": "Pretoria",
+    "languages": [
+      {
+        "code": "af",
+        "name": "Afrikaans",
+        "native": "Afrikaans"
+      },
+      {
+        "code": "en",
+        "name": "English",
+        "native": "English"
+      },
+      {
+        "code": "nr",
+        "name": "South Ndebele",
+        "native": "isiNdebele"
+      },
+      {
+        "code": "st",
+        "name": "Southern Sotho",
+        "native": "Sesotho"
+      },
+      {
+        "code": "ss",
+        "name": "Swati",
+        "native": "SiSwati"
+      },
+      {
+        "code": "tn",
+        "name": "Tswana",
+        "native": "Setswana"
+      },
+      {
+        "code": "ts",
+        "name": "Tsonga",
+        "native": "Xitsonga"
+      },
+      {
+        "code": "ve",
+        "name": "Venda",
+        "native": "Tshivenḓa"
+      },
+      {
+        "code": "xh",
+        "name": "Xhosa",
+        "native": "isiXhosa"
+      },
+      {
+        "code": "zu",
+        "name": "Zulu",
+        "native": "isiZulu"
+      }
+    ],
+    "country_flag": "http:\/\/assets.ipstack.com\/flags\/za.svg",
+    "country_flag_emoji": "🇿🇦",
+    "country_flag_emoji_unicode": "U+1F1FF U+1F1E6",
+    "calling_code": "27",
+    "is_eu": false
+  }
+}
