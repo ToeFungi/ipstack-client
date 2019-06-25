@@ -20,6 +20,9 @@ describe('IPStackClient', () => {
 
   const token = 'some-token'
   const ipAddress = '100.100.100.100'
+  const queryParams = {
+    access_key: token
+  }
 
   let ipStackClient: IPStackClient
   let ipStackClientConfiguration: IPStackClientConfiguration
@@ -40,7 +43,7 @@ describe('IPStackClient', () => {
     it('resolves and returns a geolocation model', () => {
       nock(host)
         .get(`/${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .reply(200, sampleAfricaResponse)
 
       return ipStackClient.getLocation(ipAddress)
@@ -50,7 +53,7 @@ describe('IPStackClient', () => {
     it('rejects with an `Error` when a network error occurs', () => {
       nock(host)
         .get(`/${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .replyWithError('Something strange is afoot.')
 
       return ipStackClient.getLocation(ipAddress)
@@ -59,7 +62,6 @@ describe('IPStackClient', () => {
 
     it('rejects with an `UnknownError` when an un-catered for error occurs', () => {
       const errorResponse = {
-        success: false,
         error: {
           info: 'Something strange is afoot.',
           type: 'some-type',
@@ -69,7 +71,7 @@ describe('IPStackClient', () => {
 
       nock(host)
         .get(`/${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .reply(200, errorResponse)
 
       return ipStackClient.getLocation(ipAddress)
@@ -78,7 +80,6 @@ describe('IPStackClient', () => {
 
     it('rejects with an `InvalidAccessKeyError` when an invalid access key is provided', () => {
       const errorResponse = {
-        success: false,
         error: {
           info: 'You have supplied an invalid API Access Key.',
           type: 'invalid_access_key',
@@ -88,7 +89,7 @@ describe('IPStackClient', () => {
 
       nock(host)
         .get(`/${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .reply(200, errorResponse)
 
       return ipStackClient.getLocation(ipAddress)
@@ -97,7 +98,6 @@ describe('IPStackClient', () => {
 
     it('rejects with a `UsageLimitReachedError` when too many requests are made with the same access key', () => {
       const errorResponse = {
-        success: false,
         error: {
           info: 'The maximum allowed amount of monthly API requests has been reached.',
           type: 'usage_limit_reached',
@@ -107,7 +107,7 @@ describe('IPStackClient', () => {
 
       nock(host)
         .get(`/${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .reply(200, errorResponse)
 
       return ipStackClient.getLocation(ipAddress)
@@ -116,7 +116,6 @@ describe('IPStackClient', () => {
 
     it('rejects with an `MissingAccessKeyError` when an invalid access key is provided', () => {
       const errorResponse = {
-        success: false,
         error: {
           info: 'You have not supplied an API Access Key.',
           type: 'missing_access_key',
@@ -126,7 +125,7 @@ describe('IPStackClient', () => {
 
       nock(host)
         .get(`/${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .reply(200, errorResponse)
 
       return ipStackClient.getLocation(ipAddress)
@@ -135,7 +134,6 @@ describe('IPStackClient', () => {
 
     it('rejects with an `InactiveUserError` when an un-catered for error occurs', () => {
       const errorResponse = {
-        success: false,
         error: {
           info: 'The current user account is not active.',
           type: 'inactive_user',
@@ -145,7 +143,7 @@ describe('IPStackClient', () => {
 
       nock(host)
         .get(`/${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .reply(200, errorResponse)
 
       return ipStackClient.getLocation(ipAddress)
@@ -164,7 +162,7 @@ describe('IPStackClient', () => {
 
       nock(host)
         .get(`/${ipAddress},${ipAddress},${ipAddress}`)
-        .query({ access_key: token })
+        .query(queryParams)
         .reply(200, [ sampleAfricaResponse, sampleAfricaResponse, sampleAfricaResponse ])
 
       return ipStackClient.getMultipleLocations(addressList)
