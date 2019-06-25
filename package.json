@@ -17,10 +17,10 @@
   "license": "ISC",
   "author": "Alex Pickering",
   "dependencies": {
-    "@types/nock": "^9.3.1",
     "axios": "^0.18.0"
   },
   "devDependencies": {
+    "@types/nock": "^9.3.1",
     "@types/chai": "4.1.7",
     "@types/chai-as-promised": "7.1.0",
     "@types/mocha": "5.2.6",
