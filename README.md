@@ -35,5 +35,14 @@ client.getLocation(ipAddress)
     })
 ```
 
+## Testing
+This client is tested using `chai` and `mocha` as well as variants that assist such as `chai-as-promised`. To run the
+tests you can simple run:
+```bash
+$ npm run test
+```
+
+The code coverage at the moment is +95% but will likely increase before the final release.
+
 ## Upcoming
 Still working on the multiple addresses and selected fields.
