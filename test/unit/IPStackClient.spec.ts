@@ -40,7 +40,7 @@ describe('IPStackClient', () => {
   })
 
   describe('#getLocation', () => {
-    it('resolves and returns a geolocation model with correct data', () => {
+    it('resolves and returns a geolocation model with correct encapsulated data', () => {
       nock(host)
         .get(`/${ipAddress}`)
         .query(queryParams)
@@ -160,7 +160,7 @@ describe('IPStackClient', () => {
   })
 
   describe('#getMultipleLocations', () => {
-    it('resolves and returns an array of geolocation models', () => {
+    it('resolves and returns an array of geolocation models with correct encapsulated data', () => {
       const addressList = [ ipAddress, ipAddress, ipAddress ]
 
       nock(host)
@@ -171,7 +171,10 @@ describe('IPStackClient', () => {
       return ipStackClient.getMultipleLocations(addressList)
         .should.eventually.be.fulfilled
         .then(response => {
-          response.forEach((item: any) => item.should.be.instanceof(Geolocation))
+          response.forEach((item: any) => {
+            item.should.be.instanceof(Geolocation)
+            item.getRawLocationData().should.deep.equal(sampleAfricaResponse)
+          })
         })
     })
   })
