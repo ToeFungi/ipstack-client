@@ -42,7 +42,7 @@ class IPStackClient {
    */
   public getLocation(ipAddress: string): Promise<Geolocation> {
     // Ensure address is a valid IP
-    if (!this.validateIpAddress(ipAddress)) {
+    if (!this.isValidIpAddress(ipAddress)) {
       return Promise.reject(new InvalidAddressError(`${ipAddress} is an invalid IPv4 address.`))
     }
 
@@ -90,7 +90,7 @@ class IPStackClient {
   public getMultipleLocations(addresses: Array<string>): Promise<Array<Geolocation>> {
     // Validate that each IP address provided is a valid IP address
     addresses.forEach((ipAddress: string) => {
-      if (!this.validateIpAddress(ipAddress)) return Promise.reject(new InvalidAddressError())
+      if (!this.isValidIpAddress(ipAddress)) return Promise.reject(new InvalidAddressError())
     })
 
     // Flatten the array into a string
@@ -140,7 +140,7 @@ class IPStackClient {
    * @param {string} ipAddress The IP address being provided to the client
    * @return {boolean} Whether or not the IP address is valid
    */
-  private validateIpAddress(ipAddress: string): boolean {
+  private isValidIpAddress(ipAddress: string): boolean {
     const pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
     return pattern.test(ipAddress)
   }
