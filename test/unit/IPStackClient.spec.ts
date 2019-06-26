@@ -40,7 +40,7 @@ describe('IPStackClient', () => {
   })
 
   describe('#getLocation', () => {
-    it('resolves and returns a geolocation model', () => {
+    it('resolves and returns a geolocation model with correct data', () => {
       nock(host)
         .get(`/${ipAddress}`)
         .query(queryParams)
@@ -48,6 +48,9 @@ describe('IPStackClient', () => {
 
       return ipStackClient.getLocation(ipAddress)
         .should.eventually.be.instanceof(Geolocation)
+        .then((response: Geolocation) => {
+          response.getRawLocationData().should.deep.equal(sampleAfricaResponse)
+        })
     })
 
     it('rejects with an `Error` when a network error occurs', () => {
@@ -152,7 +155,7 @@ describe('IPStackClient', () => {
 
     it('rejects with an `InvalidAddressError` when an invalid IP address is provided', () => {
       return ipStackClient.getLocation('ipAddress')
-        .should.be.rejectedWith(InvalidAddressError)
+        .should.be.rejectedWith(InvalidAddressError, 'ipAddress is an invalid IPv4 address.')
     })
   })
 

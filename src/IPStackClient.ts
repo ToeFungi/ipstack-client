@@ -42,7 +42,9 @@ class IPStackClient {
    */
   public getLocation(ipAddress: string): Promise<Geolocation> {
     // Ensure address is a valid IP
-    if (!this.validateIpAddress(ipAddress)) return Promise.reject(new InvalidAddressError())
+    if (!this.validateIpAddress(ipAddress)) {
+      return Promise.reject(new InvalidAddressError(`${ipAddress} is an invalid IPv4 address.`))
+    }
 
     /**
      * Determines if the response from the API was a successful or unsuccessful response and will proceed or throw an
