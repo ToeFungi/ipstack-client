@@ -43,21 +43,7 @@ class IPStackClient {
   public getLocation(ipAddress: string): Promise<Geolocation> {
     // Ensure address is a valid IP
     if (!this.isValidIpAddress(ipAddress)) {
-      return Promise.reject(new InvalidAddressError(`${ipAddress} is an invalid IPv4 address.`))
-    }
-
-    /**
-     * Determines if the response from the API was a successful or unsuccessful response and will proceed or throw an
-     * appropriate error depending on the state and error received
-     * @param {AxiosResponse} response The response from the API request
-     * @return {AxiosResponse}
-     */
-    const validateResponse = (response: AxiosResponse): AxiosResponse => {
-      const { data: { success, error } } = response
-      if (!success && !error) return response
-
-      const { data: { error: { code, type, info } } } = response
-      throw ErrorResponseFactory.wrapError(code, type, info)
+      return Promise.reject(new InvalidAddressError(`${ ipAddress } is an invalid IPv4 address.`))
     }
 
     /**
@@ -77,7 +63,7 @@ class IPStackClient {
 
     return this.axios.get(`/${ ipAddress }`)
       .catch(requestError)
-      .then(validateResponse)
+      .then(this.validateResponse)
       .then(wrapResponse)
   }
 
@@ -89,26 +75,14 @@ class IPStackClient {
    */
   public getMultipleLocations(addresses: Array<string>): Promise<Array<Geolocation>> {
     // Validate that each IP address provided is a valid IP address
-    addresses.forEach((ipAddress: string) => {
-      if (!this.isValidIpAddress(ipAddress)) return Promise.reject(new InvalidAddressError())
-    })
+    for (const ipAddress of addresses) {
+      if (!this.isValidIpAddress(ipAddress)) {
+        return Promise.reject(new InvalidAddressError(`${ ipAddress } is an invalid IPv4 address.`))
+      }
+    }
 
     // Flatten the array into a string
     const flattenedAddresses = addresses.toString()
-
-    /**
-     * Determines if the response from the API was a successful or unsuccessful response and will proceed or throw an
-     * appropriate error depending on the state and error received
-     * @param {AxiosResponse} response The response from the API request
-     * @return {AxiosResponse}
-     */
-    const validateResponse = (response: AxiosResponse): AxiosResponse => {
-      const { data: { success, error } } = response
-      if (!success && !error) return response
-
-      const { data: { error: { code, type, info } } } = response
-      throw ErrorResponseFactory.wrapError(code, type, info)
-    }
 
     /**
      * Wraps and returns the response data as an array of Geolocation models
@@ -124,13 +98,28 @@ class IPStackClient {
      * @throws {Error}
      */
     const requestError = () => {
-      throw new Error('An error occurred with the request to the API.')
+      throw new Error('An network or internal error occurred with the request to the API.')
     }
 
     return this.axios.get(`/${ flattenedAddresses }`)
       .catch(requestError)
-      .then(validateResponse)
+      .then(this.validateResponse)
       .then(wrapResponse)
+  }
+
+  /**
+   * Determines if the response from the API was a successful or unsuccessful response and will proceed or throw an
+   * appropriate error depending on the state and error received
+   *
+   * @param {AxiosResponse} response The response from the API request
+   * @return {AxiosResponse}
+   */
+  private validateResponse (response: AxiosResponse): AxiosResponse {
+    const { data: { success, error } } = response
+    if (!success && !error) return response
+
+    const { data: { error: { code, type, info } } } = response
+    throw ErrorResponseFactory.wrapError(code, type, info)
   }
 
   /**

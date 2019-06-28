@@ -42,7 +42,7 @@ describe('IPStackClient', () => {
   describe('#getLocation', () => {
     it('resolves and returns a geolocation model with correct encapsulated data', () => {
       nock(host)
-        .get(`/${ipAddress}`)
+        .get(`/${ ipAddress }`)
         .query(queryParams)
         .reply(200, sampleAfricaResponse)
 
@@ -55,7 +55,7 @@ describe('IPStackClient', () => {
 
     it('rejects with an `Error` when a network error occurs', () => {
       nock(host)
-        .get(`/${ipAddress}`)
+        .get(`/${ ipAddress }`)
         .query(queryParams)
         .replyWithError('Something strange is afoot.')
 
@@ -73,7 +73,7 @@ describe('IPStackClient', () => {
       }
 
       nock(host)
-        .get(`/${ipAddress}`)
+        .get(`/${ ipAddress }`)
         .query(queryParams)
         .reply(200, errorResponse)
 
@@ -91,7 +91,7 @@ describe('IPStackClient', () => {
       }
 
       nock(host)
-        .get(`/${ipAddress}`)
+        .get(`/${ ipAddress }`)
         .query(queryParams)
         .reply(200, errorResponse)
 
@@ -109,7 +109,7 @@ describe('IPStackClient', () => {
       }
 
       nock(host)
-        .get(`/${ipAddress}`)
+        .get(`/${ ipAddress }`)
         .query(queryParams)
         .reply(200, errorResponse)
 
@@ -127,7 +127,7 @@ describe('IPStackClient', () => {
       }
 
       nock(host)
-        .get(`/${ipAddress}`)
+        .get(`/${ ipAddress }`)
         .query(queryParams)
         .reply(200, errorResponse)
 
@@ -145,7 +145,7 @@ describe('IPStackClient', () => {
       }
 
       nock(host)
-        .get(`/${ipAddress}`)
+        .get(`/${ ipAddress }`)
         .query(queryParams)
         .reply(200, errorResponse)
 
@@ -160,13 +160,14 @@ describe('IPStackClient', () => {
   })
 
   describe('#getMultipleLocations', () => {
-    it('resolves and returns an array of geolocation models with correct encapsulated data', () => {
-      const addressList = [ ipAddress, ipAddress, ipAddress ]
+    const addressList = [ipAddress, ipAddress, ipAddress]
+    const flattenedList = addressList.toString()
 
+    it('resolves and returns an array of geolocation models with correct encapsulated data', () => {
       nock(host)
-        .get(`/${ipAddress},${ipAddress},${ipAddress}`)
+        .get(`/${ flattenedList }`)
         .query(queryParams)
-        .reply(200, [ sampleAfricaResponse, sampleAfricaResponse, sampleAfricaResponse ])
+        .reply(200, [sampleAfricaResponse, sampleAfricaResponse, sampleAfricaResponse])
 
       return ipStackClient.getMultipleLocations(addressList)
         .should.eventually.be.fulfilled
@@ -176,6 +177,39 @@ describe('IPStackClient', () => {
             item.getRawLocationData().should.deep.equal(sampleAfricaResponse)
           })
         })
+    })
+
+    it('rejects with an `InvalidAddressError` when an invalid IP address is provided', () => {
+      return ipStackClient.getMultipleLocations(['ipAddress'])
+        .should.be.rejectedWith(InvalidAddressError, 'ipAddress is an invalid IPv4 address.')
+    })
+
+    it('rejects with an `InactiveUserError` when an un-catered for error occurs', () => {
+      const errorResponse = {
+        error: {
+          info: 'The current user account is not active.',
+          type: 'inactive_user',
+          code: 102
+        }
+      }
+
+      nock(host)
+        .get(`/${ flattenedList }`)
+        .query(queryParams)
+        .reply(200, errorResponse)
+
+      return ipStackClient.getMultipleLocations(addressList)
+        .should.be.rejectedWith(InactiveUserError, 'The current user account is not active.')
+    })
+
+    it('rejects with an `Error` when a network error occurs', () => {
+      nock(host)
+        .get(`/${ flattenedList }`)
+        .query(queryParams)
+        .replyWithError('Something strange is afoot.')
+
+      return ipStackClient.getMultipleLocations(addressList)
+        .should.be.rejectedWith(Error, 'An network or internal error occurred with the request to the API.')
     })
   })
 })
