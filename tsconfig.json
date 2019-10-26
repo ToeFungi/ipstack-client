@@ -1,24 +1,21 @@
 {
   "compilerOptions": {
-    "preserveConstEnums": true,
-    "sourceMap": true,
     "strict": true,
+    "sourceMap": true,
+    "declaration": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
-    "declaration": true,
     "lib": [
       "es2018"
     ],
     "target": "es5",
     "outDir": "dist/",
     "typeRoots": [
-      "types",
       "node_modules/@types"
     ]
   },
   "include": [
-    "src/**/*",
-    "types/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
