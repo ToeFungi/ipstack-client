@@ -21,15 +21,18 @@ class ErrorResponseFactory {
    * @throws {UsageLimitReachedError}
    * @throws {UnknownError}
    */
-  public static wrapError (code: number, type: string, info: string) {
+  public static wrapError(code: number, type: string, info: string) {
     switch (code) {
       case 101:
-        if (type === 'missing_access_key') throw new MissingAccessKeyError(info)
-        if (type === 'invalid_access_key') throw new InvalidAccessKeyError(info)
-        break
-      case 102: throw new InactiveUserError(info)
-      case 104: throw new UsageLimitReachedError(info)
-      default: throw new UnknownError(info)
+        if (type === 'missing_access_key') return new MissingAccessKeyError(info)
+
+        return new InvalidAccessKeyError(info)
+      case 102:
+        return new InactiveUserError(info)
+      case 104:
+        return new UsageLimitReachedError(info)
+      default:
+        return new UnknownError(info)
     }
   }
 }
