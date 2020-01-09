@@ -1,22 +1,22 @@
 language: node_js
 
 node_js:
-  - "10"
+  - '10'
 
 cache:
   directories:
-    - "$HOME/.sonar/cache"
-    - "node_modules"
-    - "coverage"
-
-install:
-  - npm i
+    - '$HOME/.sonar/cache'
+    - 'node_modules'
+    - 'coverage'
+    - 'build'
 
 stages:
   - setup
   - audit
+  - lint
   - test
   - sonar
+  - build
 
 jobs:
   include:
@@ -26,6 +26,9 @@ jobs:
     - stage: audit
       script:
         - npm audit
+    - stage: lint
+      script:
+        - npm run lint
     - stage: test
       script:
         - npm run coverage
@@ -35,4 +38,7 @@ jobs:
       addons:
         sonarcloud:
           token:
-            secure: "$SONAR_API_KEY"
+            secure: '$SONAR_API_KEY'
+    - stage: build
+      script:
+        - npm run build
