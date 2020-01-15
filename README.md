@@ -13,7 +13,7 @@ application accordingly.
 ## Installation
 You can install this package via `npm`
 ```bash
-$ npm install toefungi/ipstack-client
+$ npm install skaleb-ipstack-client
 ```
 
 ## Usage
